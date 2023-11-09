@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example", "example.csproj", "{87CFF33D-DB0F-4192-9E8F-7B2A9DAC6DF4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorBarcodeLibrary", "..\RazorBarcodeLibrary\RazorBarcodeLibrary.csproj", "{9E43B9D8-531B-43D0-8362-4338B4C1BF31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87CFF33D-DB0F-4192-9E8F-7B2A9DAC6DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87CFF33D-DB0F-4192-9E8F-7B2A9DAC6DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87CFF33D-DB0F-4192-9E8F-7B2A9DAC6DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87CFF33D-DB0F-4192-9E8F-7B2A9DAC6DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E43B9D8-531B-43D0-8362-4338B4C1BF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E43B9D8-531B-43D0-8362-4338B4C1BF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E43B9D8-531B-43D0-8362-4338B4C1BF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E43B9D8-531B-43D0-8362-4338B4C1BF31}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9D4BFF8-3F68-48D8-BA47-661D0EEC631C}
+	EndGlobalSection
+EndGlobal
