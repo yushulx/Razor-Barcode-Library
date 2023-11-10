@@ -45,11 +45,3 @@ export async function createBarcodeReader(source) {
     }
     return null;
 }
-
-export async function getParameters(source) {
-
-}
-
-export async function setParameters(source) {
-
-}

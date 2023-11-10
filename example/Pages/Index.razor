@@ -55,6 +55,11 @@
         version = await barcodeJsInterop.GetVersion();
         StateHasChanged();
         reader = await barcodeJsInterop.CreateBarcodeReader();
+        // string parameters = await reader.GetParameters();
+        // Console.WriteLine(parameters);
+
+        // int ret = await reader.SetParameters(parameters);
+        // Console.WriteLine(ret);
     }
 
     public async Task Decode()

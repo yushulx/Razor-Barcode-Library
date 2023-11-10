@@ -62,5 +62,29 @@ namespace RazorBarcodeLibrary
 
             return results;
         }
+
+        public async Task<string> GetParameters()
+        {
+            if (_jsObjectReference == null) { return ""; }
+            
+            return await _jsObjectReference.InvokeAsync<string>("outputRuntimeSettingsToString");
+        }
+
+        public async Task<int> SetParameters(string parameters)
+        {
+            if (_jsObjectReference == null) { return -1; }
+
+            try
+            {
+                await _jsObjectReference.InvokeVoidAsync("initRuntimeSettingsWithString", parameters);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return -1;
+            }
+
+            return 0;
+        }
     }
 }
