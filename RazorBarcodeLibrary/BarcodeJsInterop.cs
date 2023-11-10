@@ -3,22 +3,6 @@ using System.Text.Json;
 
 namespace RazorBarcodeLibrary
 {
-    public class Reader
-    {
-        private IJSObjectReference? _jsObjectReference;
-
-        public Reader(IJSObjectReference reader) { 
-            _jsObjectReference = reader;
-        }
-
-        public async Task<JsonElement?> Decode(string base64)
-        {
-            if (_jsObjectReference == null) { return null; }
-            var result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", base64);
-            return result;
-        }
-    }
-
     public class BarcodeJsInterop : IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
@@ -53,11 +37,11 @@ namespace RazorBarcodeLibrary
             return await module.InvokeAsync<string>("getVersion");
         }
 
-        public async Task<Reader> CreateBarcodeReader()
+        public async Task<BarcodeReader> CreateBarcodeReader()
         {
             var module = await moduleTask.Value;
             IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeReader");
-            Reader reader = new Reader(jsObjectReference);
+            BarcodeReader reader = new BarcodeReader(jsObjectReference);
             return reader;
         }
 

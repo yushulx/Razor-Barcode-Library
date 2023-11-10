@@ -53,7 +53,3 @@ export async function getParameters(source) {
 export async function setParameters(source) {
 
 }
-
-export async function decode(source) {
-
-}

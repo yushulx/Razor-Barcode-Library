@@ -23,11 +23,8 @@
     <p>@result</p>
 </div>
 
-@* <BarcodeReader />
-<BarcodeScanner /> *@
-
 @code {
-    Reader? reader;
+    BarcodeReader? reader;
     BarcodeJsInterop? barcodeJsInterop;
     private MarkupString result;
     private string version = "N/A";
@@ -65,39 +62,17 @@
         if (barcodeJsInterop == null || imageSrc == null || reader == null) return;
         try
         {
-            JsonElement? tmp = await reader.Decode(imageSrc);
-            if (tmp != null)
+            List<BarcodeResult> results = await reader.DecodeBase64(imageSrc);
+            if (results.Count > 0)
             {
-                JsonElement element = tmp.Value;
+                string text = "";
 
-                if (element.ValueKind == JsonValueKind.Array)
+                foreach (BarcodeResult result in results)
                 {
-                    string text = "";
-                    foreach (JsonElement item in element.EnumerateArray())
-                    {
-                        if (item.TryGetProperty("barcodeFormatString", out JsonElement formatValue))
-                        {
-                            string? value = formatValue.GetString();
-                            if (value != null)
-                            {
-                                text += "format: " + value + ", ";
-                            }
-                            
-                        }
-
-                        if (item.TryGetProperty("barcodeText", out JsonElement textValue))
-                        {
-                            string? value = textValue.GetString();
-                            if (value != null)
-                            {
-                                text += "text: " + value + "<br>";
-                            }
-                            
-                        }
-                    }
-                    result = new MarkupString(text);
+                    text += "format: " + result.Format + ", ";
+                    text += "text: " + result.Text + "<br>";
                 }
-                
+                result = new MarkupString(text);
             }
             
         }
