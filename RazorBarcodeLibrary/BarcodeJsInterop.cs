@@ -1,13 +1,23 @@
 using Microsoft.JSInterop;
+using System.Text.Json;
 
 namespace RazorBarcodeLibrary
 {
-    // This class provides an example of how JavaScript functionality can be wrapped
-    // in a .NET class for easy consumption. The associated JavaScript module is
-    // loaded on demand when first needed.
-    //
-    // This class can be registered as scoped DI service and then injected into Blazor
-    // components for use.
+    public class Reader
+    {
+        private IJSObjectReference? _jsObjectReference;
+
+        public Reader(IJSObjectReference reader) { 
+            _jsObjectReference = reader;
+        }
+
+        public async Task<JsonElement?> Decode(string base64)
+        {
+            if (_jsObjectReference == null) { return null; }
+            var result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", base64);
+            return result;
+        }
+    }
 
     public class BarcodeJsInterop : IAsyncDisposable
     {
@@ -41,6 +51,14 @@ namespace RazorBarcodeLibrary
         {
             var module = await moduleTask.Value;
             return await module.InvokeAsync<string>("getVersion");
+        }
+
+        public async Task<Reader> CreateBarcodeReader()
+        {
+            var module = await moduleTask.Value;
+            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeReader");
+            Reader reader = new Reader(jsObjectReference);
+            return reader;
         }
 
         public async ValueTask DisposeAsync()

@@ -31,4 +31,29 @@ export async function loadWasm() {
     catch (ex) {
         console.error(ex);
     }
-}   
+}
+
+export async function createBarcodeReader(source) {
+    if (!Dynamsoft) return;
+
+    try {
+        let barcodeReader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+        return barcodeReader;
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+    return null;
+}
+
+export async function getParameters(source) {
+
+}
+
+export async function setParameters(source) {
+
+}
+
+export async function decode(source) {
+
+}
