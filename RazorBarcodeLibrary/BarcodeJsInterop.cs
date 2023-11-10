@@ -22,7 +22,19 @@ namespace RazorBarcodeLibrary
         public async Task InitializeAsync()
         {
             var module = await moduleTask.Value;
-            await module.InvokeVoidAsync("init");
+            await module.InvokeAsync<object>("init");
+        }
+
+        public async Task SetLicense(string license)
+        {
+            var module = await moduleTask.Value;
+            await module.InvokeVoidAsync("setLicense", license);
+        }
+
+        public async Task LoadWasm()
+        {
+            var module = await moduleTask.Value;
+            await module.InvokeVoidAsync("loadWasm");
         }
 
         public async ValueTask<string> GetVersion()

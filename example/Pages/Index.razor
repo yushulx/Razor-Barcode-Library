@@ -4,9 +4,11 @@
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
+<a>SDK Version: @result</a>
+
 <Component1 />
 <button @onclick="Decode">Read Barcode</button>
-<a>@result</a>
+
 @code {
     BarcodeJsInterop? barcodeJsInterop;
     private string result = "localhost";
@@ -16,8 +18,10 @@
     {
         barcodeJsInterop = new BarcodeJsInterop(JSRuntime);
         await barcodeJsInterop.InitializeAsync();
+        await barcodeJsInterop.SetLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
+        await barcodeJsInterop.LoadWasm();
+        result = await barcodeJsInterop.GetVersion();
     }
-
 
     public async Task Decode()
     {
