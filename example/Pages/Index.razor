@@ -14,6 +14,7 @@
     {
         <div class="full-img">
             <img src="@imageSrc" />
+            <canvas id="imageCanvas" width="300" height="300"></canvas>
         </div>
     }
 </div>
@@ -29,6 +30,7 @@
     private MarkupString result;
     private string version = "N/A";
     private string? imageSrc;
+
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
         result = new MarkupString("");
@@ -67,6 +69,9 @@
         if (barcodeJsInterop == null || imageSrc == null || reader == null) return;
         try
         {
+            IJSObjectReference canvas = await barcodeJsInterop.Base64ToCanvas(imageSrc);
+            // List<BarcodeResult> results = await reader.DecodeCanvas(canvas);
+
             List<BarcodeResult> results = await reader.DecodeBase64(imageSrc);
             if (results.Count > 0)
             {

@@ -25,6 +25,12 @@ namespace RazorBarcodeLibrary
             List<BarcodeResult> results = new List<BarcodeResult>();
             if (_jsObjectReference == null) { return results; }
             JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", base64);
+            return WrapResult(result);
+        }
+
+        private List<BarcodeResult> WrapResult(JsonElement? result)
+        {
+            List<BarcodeResult> results = new List<BarcodeResult>();
             if (result != null)
             {
                 JsonElement element = result.Value;
@@ -59,8 +65,15 @@ namespace RazorBarcodeLibrary
                     }
                 }
             }
-
             return results;
+        }
+
+        public async Task<List<BarcodeResult>> DecodeCanvas(IJSObjectReference canvas)
+        {
+            List<BarcodeResult> results = new List<BarcodeResult>();
+            if (_jsObjectReference == null) { return results; }
+            JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", canvas);
+            return WrapResult(result);
         }
 
         public async Task<string> GetParameters()

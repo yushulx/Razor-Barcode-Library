@@ -45,6 +45,13 @@ namespace RazorBarcodeLibrary
             return reader;
         }
 
+        public async Task<IJSObjectReference> Base64ToCanvas(string base64)
+        {
+            var module = await moduleTask.Value;
+            var canvas = await module.InvokeAsync<IJSObjectReference>("decodeBase64Image", base64);
+            return canvas;
+        }
+
         public async ValueTask DisposeAsync()
         {
             if (moduleTask.IsValueCreated)

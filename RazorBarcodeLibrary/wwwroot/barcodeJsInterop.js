@@ -45,3 +45,21 @@ export async function createBarcodeReader(source) {
     }
     return null;
 }
+
+export function decodeBase64Image(base64) {
+    return new Promise((resolve, reject) => {
+        var canvas = document.createElement("canvas");
+        var image = new Image();
+        image.src = base64;
+        image.onload = () => {
+            canvas.width = image.width;
+            canvas.height = image.height;
+            let context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            resolve(canvas);
+        };
+        image.onerror = (error) => {
+            reject(error);
+        };
+    });
+}
