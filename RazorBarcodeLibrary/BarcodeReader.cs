@@ -61,6 +61,60 @@ namespace RazorBarcodeLibrary
 
                         }
 
+                        if (item.TryGetProperty("localizationResult", out JsonElement localizationResult))
+                        {
+                            if (localizationResult.TryGetProperty("x1", out JsonElement x1Value))
+                            {
+                                int intValue = x1Value.GetInt32();
+                                barcodeResult.x1 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("y1", out JsonElement y1Value))
+                            {
+                                int intValue = y1Value.GetInt32();
+                                barcodeResult.y1 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("x2", out JsonElement x2Value))
+                            {
+                                int intValue = x2Value.GetInt32();
+                                barcodeResult.x2 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("y2", out JsonElement y2Value))
+                            {
+                                int intValue = y2Value.GetInt32();
+                                barcodeResult.y2 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("x3", out JsonElement x3Value))
+                            {
+                                int intValue = x3Value.GetInt32();
+                                barcodeResult.x3 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("y3", out JsonElement y3Value))
+                            {
+                                int intValue = y3Value.GetInt32();
+                                barcodeResult.y3 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("x4", out JsonElement x4Value))
+                            {
+                                int intValue = x4Value.GetInt32();
+                                barcodeResult.x4 = intValue;
+                            }
+
+                            if (localizationResult.TryGetProperty("y4", out JsonElement y4Value))
+                            {
+                                int intValue = y4Value.GetInt32();
+                                barcodeResult.y4 = intValue;
+                            }
+
+                            Console.WriteLine(barcodeResult.ToString());
+
+                        }
+
                         results.Add(barcodeResult);
                     }
                 }
