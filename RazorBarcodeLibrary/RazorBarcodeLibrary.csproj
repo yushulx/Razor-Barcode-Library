@@ -1,9 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
+    <PackageId>Razor.Barcode.Library</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>yushulx</Authors>
+    <Company>Dynamsoft</Company>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Description>A Razor Class Library, equipped with the Dynamsoft JavaScript library, enables the
+      creation of web-based barcode reader applications entirely in C#.</Description>
+    <PackageProjectUrl>https://github.com/yushulx/Razor-Barcode-Library/tree/main</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/yushulx/Razor-Barcode-Library/tree/main</RepositoryUrl>
+    <PackageTags>
+      barcode;qrcode;pdf417;datamatrix;csharp;blazor;dotnet;aztec;code39;code128;ean13</PackageTags>
+    <PackageReleaseNotes>
+      - Added barcode reader APIs for Blazor WebAssembly.
+    </PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
 
