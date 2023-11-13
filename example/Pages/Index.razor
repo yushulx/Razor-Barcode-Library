@@ -12,9 +12,9 @@
     <InputFile OnChange="LoadImage" />
     @if (imageSrc != null)
     {
-        <div class="full-img">
-            <img src="@imageSrc" />
-            <canvas id="imageCanvas" width="300" height="300"></canvas>
+        <div id="imageview">
+            <img id="image" src="@imageSrc" />
+            <canvas id="overlay"></canvas>
         </div>
     }
 </div>
@@ -34,6 +34,7 @@
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
         result = new MarkupString("");
+        if (barcodeJsInterop != null) await barcodeJsInterop.ClearCanvas("overlay");
         var imageFiles = e.GetMultipleFiles();
         var format = "image/png"; 
 
@@ -76,13 +77,16 @@
             if (results.Count > 0)
             {
                 string text = "";
-
+                List<Dictionary<string, object>> output = new List<Dictionary<string, object>>();
                 foreach (BarcodeResult result in results)
                 {
                     text += "format: " + result.Format + ", ";
                     text += "text: " + result.Text + "<br>";
+                    output.Add(result.ToJson());
                 }
                 result = new MarkupString(text);
+
+                await barcodeJsInterop.DrawCanvas("overlay", reader.SourceWidth, reader.SourceHeight, output);
             }
             
         }
