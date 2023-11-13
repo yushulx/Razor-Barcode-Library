@@ -20,34 +20,92 @@
     </div>
 
     <p>SDK Version: @version</p>
+
+    <div class="row">
+        <select @bind="SelectedOption">
+            <option value="Barcode Reader">Barcode Reader</option>
+            <option value="Barcode Scanner">Barcode Scanner</option>
+        </select>
+    </div>
 </div>
 
 <div class="container">
     <div>
-        <InputFile OnChange="LoadImage" />
-        @if (imageSrc != null)
+        @if (_selectedOption == "Barcode Reader")
         {
-            <div id="imageview">
-                <img id="image" src="@imageSrc" />
-                <canvas id="overlay"></canvas>
+            <div>
+                <InputFile OnChange="LoadImage" />
+                @if (imageSrc != null)
+                {
+                    <div id="imageview">
+                        <img id="image" src="@imageSrc" />
+                        <canvas id="overlay"></canvas>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <button @onclick="Decode">Read Barcode</button>
+                <p>@result</p>
             </div>
         }
-    </div>
+        else if (_selectedOption == "Barcode Scanner")
+        {
+            <div class="row">
+                <div>
+                    <button @onclick="GetCameras">Get Cameras</button>
+                    <select id="sources" @bind="selectedValue">
+                        @foreach (var camera in cameras)
+                        {
+                            <option value="@camera.DeviceId">@camera.Label</option>
+                        }
+                    </select>
+                    <button @onclick="OpenCamera">Open Camera</button>
+                </div>
 
-    <div>
-        <button @onclick="Decode">Read Barcode</button>
-        <p>@result</p>
-    </div>
+            </div>
+
+            <div id="videoview">
+                <div class="dce-video-container" id="videoContainer"></div>
+                <canvas id="videoOverlay"></canvas>
+            </div>
+        }
+    </div> 
 </div>
 
 @code {
     private bool isLoading = false;
     BarcodeReader? reader;
+    BarcodeScanner? scanner;
     BarcodeJsInterop? barcodeJsInterop;
     private MarkupString result;
     private string version = "N/A";
     private string? imageSrc;
     private string licenseKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+    private string _selectedOption = "Barcode Reader";
+    private string selectedValue { get; set; } = string.Empty;
+    private List<Camera> cameras = new List<Camera>();
+
+    public string SelectedOption
+    {
+        get => _selectedOption;
+        set
+        {
+            if (_selectedOption != value)
+            {
+                _selectedOption = value;
+                var _ = OnChange(); 
+            }
+        }
+    }
+
+    private async Task OnChange()
+    {
+        if (scanner != null && _selectedOption == "Barcode Reader")
+        {
+            await scanner.CloseCamera();
+        }
+    }
 
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
@@ -86,12 +144,10 @@
             if (results.Count > 0)
             {
                 string text = "";
-                List<Dictionary<string, object>> output = new List<Dictionary<string, object>>();
                 foreach (BarcodeResult result in results)
                 {
                     text += "format: " + result.Format + ", ";
                     text += "text: " + result.Text + "<br>";
-                    output.Add(result.ToJson());
                 }
                 result = new MarkupString(text);
 
@@ -116,11 +172,52 @@
         version = await barcodeJsInterop.GetVersion();
         StateHasChanged();
         reader = await barcodeJsInterop.CreateBarcodeReader();
+        scanner = await barcodeJsInterop.CreateBarcodeScanner();
         isLoading = false;
         // string parameters = await reader.GetParameters();
         // Console.WriteLine(parameters);
 
         // int ret = await reader.SetParameters(parameters);
         // Console.WriteLine(ret);
+    }
+
+    public async Task GetCameras()
+    {
+        if (barcodeJsInterop == null || scanner == null) return;
+        try
+        {
+            isLoading = true;
+            cameras = await scanner.GetCameras();
+            if (cameras.Count >= 0)
+            {
+                selectedValue = cameras[0].Label;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        isLoading = false;
+    }
+
+    public async Task OpenCamera()
+    {
+        if (barcodeJsInterop == null || scanner == null) return;
+        try
+        {
+            isLoading = true;
+            await scanner.SetVideoElement("videoContainer");
+
+            int selectedIndex = cameras.FindIndex(camera => camera.Label == selectedValue);
+            await scanner.OpenCamera(cameras[selectedIndex]);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        isLoading = false;
     }
 }

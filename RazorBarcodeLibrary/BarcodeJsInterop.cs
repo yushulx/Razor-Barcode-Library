@@ -45,6 +45,14 @@ namespace RazorBarcodeLibrary
             return reader;
         }
 
+        public async Task<BarcodeScanner> CreateBarcodeScanner()
+        {
+            var module = await moduleTask.Value;
+            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeScanner");
+            BarcodeScanner scanner = new BarcodeScanner(module, jsObjectReference);
+            return scanner;
+        }
+
         public async Task<IJSObjectReference> Base64ToCanvas(string base64)
         {
             var module = await moduleTask.Value;

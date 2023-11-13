@@ -33,13 +33,26 @@ export async function loadWasm() {
     }
 }
 
-export async function createBarcodeReader(source) {
+export async function createBarcodeReader() {
     if (!Dynamsoft) return;
 
     try {
-        let barcodeReader = await Dynamsoft.DBR.BarcodeReader.createInstance();
-        barcodeReader.ifSaveOriginalImageInACanvas = true;
-        return barcodeReader;
+        let reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+        reader.ifSaveOriginalImageInACanvas = true;
+        return reader;
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+    return null;
+}
+
+export async function createBarcodeScanner() {
+    if (!Dynamsoft) return;
+
+    try {
+        let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+        return scanner;
     }
     catch (ex) {
         console.error(ex);
@@ -119,3 +132,55 @@ export function getSourceHeight(reader) {
     let canvas = reader.getOriginalImageInACanvas();
     return canvas.height;
 }   
+
+export async function setVideoElement(scanner, videoId) {
+    if (!Dynamsoft) return;
+
+    try {
+        await scanner.setUIElement(document.getElementById(videoId));
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+}
+
+export async function openCamera(scanner, cameraInfo) {
+    if (!Dynamsoft) return;
+
+    try {
+        await scanner.setCurrentCamera(cameraInfo);
+        scanner.onFrameRead = results => {
+            console.log(results);
+        };
+        scanner.onUnduplicatedRead = (txt, result) => { };
+        scanner.onPlayed = function () {
+            
+        }
+        await scanner.show();
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+}
+
+export async function closeCamera(scanner) {
+    if (!Dynamsoft) return;
+
+    try {
+        await scanner.close();
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+}
+
+export async function getCameras(scanner) {
+    if (!Dynamsoft) return;
+
+    try {
+        return await scanner.getAllCameras();
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+}
