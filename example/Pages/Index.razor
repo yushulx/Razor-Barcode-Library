@@ -86,7 +86,7 @@
                 }
                 result = new MarkupString(text);
 
-                await barcodeJsInterop.DrawCanvas("overlay", reader.SourceWidth, reader.SourceHeight, output);
+                await barcodeJsInterop.DrawCanvas("overlay", reader.SourceWidth, reader.SourceHeight, results);
             }
             
         }

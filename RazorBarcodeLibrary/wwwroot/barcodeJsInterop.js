@@ -38,12 +38,58 @@ export async function createBarcodeReader(source) {
 
     try {
         let barcodeReader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+        barcodeReader.ifSaveOriginalImageInACanvas = true;
         return barcodeReader;
     }
     catch (ex) {
         console.error(ex);
     }
     return null;
+}
+
+export function drawCanvas(canvasId, sourceWidth, sourceHeight, results) {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    canvas.width = sourceWidth;
+    canvas.height = sourceHeight;
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    
+    for (var i = 0; i < results.length; ++i) {
+        let result = results[i];
+        context.beginPath();
+        context.strokeStyle = 'red';
+        context.lineWidth = 5;
+        context.moveTo(result.x1, result.y1);
+        context.lineTo(result.x2, result.y2);
+        context.lineTo(result.x3, result.y3);
+        context.lineTo(result.x4, result.y4);
+        context.lineTo(result.x1, result.y1);
+        context.stroke();
+
+        let x = [result.x1, result.x2, result.x3, result.x4];
+        let y = [result.y1, result.y2, result.y3, result.y4];
+        x.sort(function (a, b) {
+            return a - b;
+        });
+        y.sort(function (a, b) {
+            return b - a;
+        });
+        let left = x[0];
+        let top = y[0];
+
+        context.font = '18px Verdana';
+        context.fillStyle = '#ff0000';
+        context.fillText(result.text, left, top);
+    }
+}
+
+export function clearCanvas(canvasId) {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 export function decodeBase64Image(base64) {
@@ -63,3 +109,13 @@ export function decodeBase64Image(base64) {
         };
     });
 }
+
+export function getSourceWidth(reader) {
+    let canvas = reader.getOriginalImageInACanvas();
+    return canvas.width;
+}
+
+export function getSourceHeight(reader) {
+    let canvas = reader.getOriginalImageInACanvas();
+    return canvas.height;
+}   

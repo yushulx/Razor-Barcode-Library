@@ -13,18 +13,23 @@ namespace RazorBarcodeLibrary
 {
     public class BarcodeReader
     {
-        private IJSObjectReference? _jsObjectReference;
+        private IJSObjectReference _module;
+        private IJSObjectReference _jsObjectReference;
 
-        public BarcodeReader(IJSObjectReference reader)
+        public int SourceWidth, SourceHeight;
+
+        public BarcodeReader(IJSObjectReference module, IJSObjectReference reader)
         {
+            _module = module;
             _jsObjectReference = reader;
         }
 
         public async Task<List<BarcodeResult>> DecodeBase64(string base64)
         {
             List<BarcodeResult> results = new List<BarcodeResult>();
-            if (_jsObjectReference == null) { return results; }
             JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", base64);
+            SourceWidth = await _module.InvokeAsync<int>("getSourceWidth", _jsObjectReference);
+            SourceHeight = await _module.InvokeAsync<int>("getSourceHeight", _jsObjectReference);
             return WrapResult(result);
         }
 
@@ -48,7 +53,6 @@ namespace RazorBarcodeLibrary
                             {
                                 barcodeResult.Format = value;
                             }
-
                         }
 
                         if (item.TryGetProperty("barcodeText", out JsonElement textValue))
@@ -66,49 +70,49 @@ namespace RazorBarcodeLibrary
                             if (localizationResult.TryGetProperty("x1", out JsonElement x1Value))
                             {
                                 int intValue = x1Value.GetInt32();
-                                barcodeResult.x1 = intValue;
+                                barcodeResult.X1 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("y1", out JsonElement y1Value))
                             {
                                 int intValue = y1Value.GetInt32();
-                                barcodeResult.y1 = intValue;
+                                barcodeResult.Y1 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("x2", out JsonElement x2Value))
                             {
                                 int intValue = x2Value.GetInt32();
-                                barcodeResult.x2 = intValue;
+                                barcodeResult.X2 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("y2", out JsonElement y2Value))
                             {
                                 int intValue = y2Value.GetInt32();
-                                barcodeResult.y2 = intValue;
+                                barcodeResult.Y2 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("x3", out JsonElement x3Value))
                             {
                                 int intValue = x3Value.GetInt32();
-                                barcodeResult.x3 = intValue;
+                                barcodeResult.X3 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("y3", out JsonElement y3Value))
                             {
                                 int intValue = y3Value.GetInt32();
-                                barcodeResult.y3 = intValue;
+                                barcodeResult.Y3 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("x4", out JsonElement x4Value))
                             {
                                 int intValue = x4Value.GetInt32();
-                                barcodeResult.x4 = intValue;
+                                barcodeResult.X4 = intValue;
                             }
 
                             if (localizationResult.TryGetProperty("y4", out JsonElement y4Value))
                             {
                                 int intValue = y4Value.GetInt32();
-                                barcodeResult.y4 = intValue;
+                                barcodeResult.Y4 = intValue;
                             }
 
                             Console.WriteLine(barcodeResult.ToString());
@@ -127,6 +131,8 @@ namespace RazorBarcodeLibrary
             List<BarcodeResult> results = new List<BarcodeResult>();
             if (_jsObjectReference == null) { return results; }
             JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", canvas);
+            SourceWidth = await _module.InvokeAsync<int>("getSourceWidth", _jsObjectReference);
+            SourceHeight = await _module.InvokeAsync<int>("getSourceHeight", _jsObjectReference);
             return WrapResult(result);
         }
 
