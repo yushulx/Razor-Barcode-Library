@@ -13,7 +13,7 @@ namespace RazorBarcodeLibrary
                 "import", "./_content/RazorBarcodeLibrary/barcodeJsInterop.js").AsTask());
         }
 
-        public async Task InitializeAsync()
+        public async Task LoadJS()
         {
             var module = await moduleTask.Value;
             await module.InvokeAsync<object>("init");

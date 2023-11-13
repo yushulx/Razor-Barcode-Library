@@ -6,30 +6,48 @@
 <PageTitle>Index</PageTitle>
 
 <h1>Razor Barcode Library</h1>
-<a>SDK Version: @version</a>
-
-<div>
-    <InputFile OnChange="LoadImage" />
-    @if (imageSrc != null)
-    {
-        <div id="imageview">
-            <img id="image" src="@imageSrc" />
-            <canvas id="overlay"></canvas>
-        </div>
-    }
+<div id="loading-indicator" class="loading-indicator" style="@(isLoading ? "display: flex;" : "display: none;")">
+    <div class="spinner"></div>
 </div>
 
-<div>
-    <button @onclick="Decode">Read Barcode</button>
-    <p>@result</p>
+<div class="connection">
+
+    <div class="row">
+        <label>License key: </label>
+        <div class="filler"></div>
+        <input type="text" placeholder="@licenseKey" @bind="licenseKey">
+        <button @onclick="Activate">Activate SDK</button>
+    </div>
+
+    <p>SDK Version: @version</p>
+</div>
+
+<div class="container">
+    <div>
+        <InputFile OnChange="LoadImage" />
+        @if (imageSrc != null)
+        {
+            <div id="imageview">
+                <img id="image" src="@imageSrc" />
+                <canvas id="overlay"></canvas>
+            </div>
+        }
+    </div>
+
+    <div>
+        <button @onclick="Decode">Read Barcode</button>
+        <p>@result</p>
+    </div>
 </div>
 
 @code {
+    private bool isLoading = false;
     BarcodeReader? reader;
     BarcodeJsInterop? barcodeJsInterop;
     private MarkupString result;
     private string version = "N/A";
     private string? imageSrc;
+    private string licenseKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
 
     private async Task LoadImage(InputFileChangeEventArgs e)
     {
@@ -52,17 +70,7 @@
     protected override async Task OnInitializedAsync()
     {
         barcodeJsInterop = new BarcodeJsInterop(JSRuntime);
-        await barcodeJsInterop.InitializeAsync();
-        await barcodeJsInterop.SetLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
-        await barcodeJsInterop.LoadWasm();
-        version = await barcodeJsInterop.GetVersion();
-        StateHasChanged();
-        reader = await barcodeJsInterop.CreateBarcodeReader();
-        // string parameters = await reader.GetParameters();
-        // Console.WriteLine(parameters);
-
-        // int ret = await reader.SetParameters(parameters);
-        // Console.WriteLine(ret);
+        await barcodeJsInterop.LoadJS();
     }
 
     public async Task Decode()
@@ -70,6 +78,7 @@
         if (barcodeJsInterop == null || imageSrc == null || reader == null) return;
         try
         {
+            isLoading = true;
             IJSObjectReference canvas = await barcodeJsInterop.Base64ToCanvas(imageSrc);
             // List<BarcodeResult> results = await reader.DecodeCanvas(canvas);
 
@@ -88,11 +97,30 @@
 
                 await barcodeJsInterop.DrawCanvas("overlay", reader.SourceWidth, reader.SourceHeight, results);
             }
-            
+
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
+
+        isLoading = false;
+    }
+
+    public async Task Activate()
+    {
+        if (barcodeJsInterop == null) return;
+        isLoading = true;
+        await barcodeJsInterop.SetLicense(licenseKey);
+        await barcodeJsInterop.LoadWasm();
+        version = await barcodeJsInterop.GetVersion();
+        StateHasChanged();
+        reader = await barcodeJsInterop.CreateBarcodeReader();
+        isLoading = false;
+        // string parameters = await reader.GetParameters();
+        // Console.WriteLine(parameters);
+
+        // int ret = await reader.SetParameters(parameters);
+        // Console.WriteLine(ret);
     }
 }

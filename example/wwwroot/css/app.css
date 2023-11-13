@@ -103,8 +103,7 @@ a, .btn-link {
 
 #imageview {
     position: relative;
-    width: 30vw;
-    /*width: 480px;*/
+    width: 600px;
 }
 
 #image {
@@ -120,4 +119,75 @@ a, .btn-link {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background: linear-gradient(to right, #FF0000 0%, #FF8000 17%, #FFFF00 33%, #00FF00 50%, #00FFFF 67%, #0080FF 83%, #0000FF 100%);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.container {
+    max-width: 640px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px auto;
+    align-items: center;
+}
+
+select {
+    width: 200px;
+}
+
+.connection {
+    max-width: 640px;
+    margin: 10px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input {
+    width: 300px;
+}
+
+.filler {
+    flex-grow: 1;
 }
