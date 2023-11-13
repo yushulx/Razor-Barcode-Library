@@ -45,4 +45,4 @@ A Razor Class Library, equipped with the [Dynamsoft JavaScript Barcode SDK](http
 ## Example
 - [Blazor WebAssembly](https://github.com/yushulx/Razor-Barcode-Library/tree/main/example)
     
-    <img src="https://github.com/yushulx/Razor-Barcode-Library/assets/2202306/b2cf96db-8466-4c3a-a802-4fd39cec42cd" width="360" alt="blazor multiple qr code detection">
+    ![razor barcode reader](https://user-images.githubusercontent.com/2202306/282373638-b2cf96db-8466-4c3a-a802-4fd39cec42cd.png)
