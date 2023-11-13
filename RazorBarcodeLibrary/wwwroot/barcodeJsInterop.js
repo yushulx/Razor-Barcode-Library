@@ -74,7 +74,7 @@ export function drawCanvas(canvasId, sourceWidth, sourceHeight, results) {
             return a - b;
         });
         y.sort(function (a, b) {
-            return b - a;
+            return a - b;
         });
         let left = x[0];
         let top = y[0];
