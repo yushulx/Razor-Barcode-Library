@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>Razor.Barcode.Library</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
     <TargetFramework>net7.0</TargetFramework>
@@ -16,7 +16,7 @@
     <PackageTags>
       barcode;qrcode;pdf417;datamatrix;csharp;blazor;dotnet;aztec;code39;code128;ean13</PackageTags>
     <PackageReleaseNotes>
-      - Added barcode reader APIs for Blazor WebAssembly.
+      - Updated README.md.
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
