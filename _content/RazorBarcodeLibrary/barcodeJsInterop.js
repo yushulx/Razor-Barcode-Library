@@ -1,13 +1,13 @@
-export function init(license) {
+export function init() {
     return new Promise((resolve, reject) => {
         let script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = '_content/RazorBarcodeLibrary/dbr.js';
         script.onload = async () => {
-            resolve(); 
+            resolve();
         };
         script.onerror = () => {
-            reject(); 
+            reject();
         };
         document.head.appendChild(script);
     });
@@ -72,8 +72,8 @@ export function drawCanvas(canvasId, sourceWidth, sourceHeight, results) {
     canvas.height = sourceHeight;
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    
-    
+
+
     for (var i = 0; i < results.length; ++i) {
         let result = results[i];
         context.beginPath();
@@ -136,7 +136,7 @@ export function getSourceWidth(reader) {
 export function getSourceHeight(reader) {
     let canvas = reader.getOriginalImageInACanvas();
     return canvas.height;
-}   
+}
 
 export async function setVideoElement(scanner, videoId) {
     if (!Dynamsoft) return;
@@ -159,7 +159,7 @@ export async function openCamera(scanner, cameraInfo) {
         };
         scanner.onUnduplicatedRead = (txt, result) => { };
         scanner.onPlayed = function () {
-            
+
         }
         await scanner.show();
     }
