@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <PackageId>Razor.Barcode.Library</PackageId>
+    <PackageId>RazorBarcodeLibrary</PackageId>
     <Version>0.1.1</Version>
     <Authors>yushulx</Authors>
     <Company>Dynamsoft</Company>
