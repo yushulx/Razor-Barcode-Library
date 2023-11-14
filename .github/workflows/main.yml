@@ -26,25 +26,26 @@ jobs:
         with:
           dotnet-version: '7.0.x'
           include-prerelease: true
-
-      - name: Change directory
-        run: cd example
         
       - name: Publish .NET Core Project
         run: dotnet publish example.csproj -c Release -o release --nologo 
+        working-directory: ./example
         
       - name: Change base-tag in index.html from / to Razor-Barcode-Library
         run: sed -i 's/<base href="\/" \/>/<base href="\/Razor-Barcode-Library\/" \/>/g' release/wwwroot/index.html
+        working-directory: ./example
         
       - name: copy index.html to 404.html
         run: cp release/wwwroot/index.html release/wwwroot/404.html
+        working-directory: ./example
         
       - name: Add .nojekyll file
         run: touch release/wwwroot/.nojekyll
+        working-directory: ./example
       
       - name: Commit wwwroot to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: release/wwwroot
+          FOLDER: example/release/wwwroot
