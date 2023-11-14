@@ -20,7 +20,12 @@ export function getVersion() {
 
 export function setLicense(license) {
     if (!Dynamsoft) return;
-    Dynamsoft.DBR.BarcodeScanner.license = license;
+    try {
+        Dynamsoft.DBR.BarcodeScanner.license = license;
+    }
+    catch (ex) {
+        console.error(ex);
+    }
 }
 
 export async function loadWasm() {
