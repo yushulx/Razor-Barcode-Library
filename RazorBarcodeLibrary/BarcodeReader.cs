@@ -26,7 +26,6 @@ namespace RazorBarcodeLibrary
 
         public async Task<List<BarcodeResult>> DecodeBase64(string base64)
         {
-            List<BarcodeResult> results = new List<BarcodeResult>();
             JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", base64);
             SourceWidth = await _module.InvokeAsync<int>("getSourceWidth", _jsObjectReference);
             SourceHeight = await _module.InvokeAsync<int>("getSourceHeight", _jsObjectReference);
@@ -35,8 +34,6 @@ namespace RazorBarcodeLibrary
 
         public async Task<List<BarcodeResult>> DecodeCanvas(IJSObjectReference canvas)
         {
-            List<BarcodeResult> results = new List<BarcodeResult>();
-            if (_jsObjectReference == null) { return results; }
             JsonElement? result = await _jsObjectReference.InvokeAsync<JsonElement>("decode", canvas);
             SourceWidth = await _module.InvokeAsync<int>("getSourceWidth", _jsObjectReference);
             SourceHeight = await _module.InvokeAsync<int>("getSourceHeight", _jsObjectReference);
@@ -46,7 +43,7 @@ namespace RazorBarcodeLibrary
         public async Task<string> GetParameters()
         {
             if (_jsObjectReference == null) { return ""; }
-            
+
             return await _jsObjectReference.InvokeAsync<string>("outputRuntimeSettingsToString");
         }
 
