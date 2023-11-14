@@ -1,6 +1,9 @@
 # Razor Barcode Library
 A Razor Class Library, equipped with the [Dynamsoft JavaScript Barcode SDK](https://www.npmjs.com/package/dynamsoft-javascript-barcode), enables the creation of web-based barcode reader applications entirely in C#.
 
+## Online Demo
+[https://yushulx.me/Razor-Barcode-Library/](https://yushulx.me/Razor-Barcode-Library/)
+
 ## Prerequisites
 - [Dynamsoft JavaScript Barcode License](https://www.dynamsoft.com/customer/license/trialLicense?product=dbr&utm_source=github&utm_campaign=razor-barcode-library)
 
