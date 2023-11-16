@@ -52,21 +52,30 @@ export async function createBarcodeReader() {
     return null;
 }
 
-export async function createBarcodeScanner(dotNetHelper, callback) {
+export async function createBarcodeScanner() {
     if (!Dynamsoft) return;
 
     try {
         let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
-        scanner.onFrameRead = results => {
-            //console.log(results);
-
-            dotNetHelper.invokeMethodAsync(callback, results);
-        };
         scanner.onUnduplicatedRead = (txt, result) => { };
         scanner.onPlayed = function () {
 
         }
         return scanner;
+    }
+    catch (ex) {
+        console.error(ex);
+    }
+    return null;
+}
+
+export async function registerCallback(scanner, dotNetHelper, callback) {
+    if (!Dynamsoft) return;
+
+    try {
+        scanner.onFrameRead = results => {
+            dotNetHelper.invokeMethodAsync(callback, results);
+        };
     }
     catch (ex) {
         console.error(ex);
