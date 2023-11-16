@@ -160,7 +160,9 @@ export async function setVideoElement(scanner, videoId) {
     if (!Dynamsoft) return;
 
     try {
-        await scanner.setUIElement(document.getElementById(videoId));
+        let element = document.getElementById(videoId);
+        element.className = "dce-video-container";
+        await scanner.setUIElement(element);
     }
     catch (ex) {
         console.error(ex);
