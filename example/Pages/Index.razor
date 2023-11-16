@@ -40,7 +40,7 @@
                 {
                     <div id="imageview">
                         <img id="image" src="@imageSrc" />
-                        <canvas id="overlay"></canvas>
+                        <canvas id="overlay" class="overlay"></canvas>
                     </div>
                 }
             </div>
@@ -67,7 +67,7 @@
 
             <div id="videoview">
                 <div id="videoContainer"></div>
-                <canvas id="videoOverlay"></canvas>
+                <canvas id="videoOverlay" class="overlay"></canvas>
             </div>
         }
         <div>
@@ -230,9 +230,9 @@
         isLoading = false;
     }
 
-    public void OnCallback(List<BarcodeResult> results)
+    public async Task OnCallback(List<BarcodeResult> results)
     {
-        if (results.Count > 0)
+        if (barcodeJsInterop != null && scanner != null)
         {
             string text = "";
             foreach (BarcodeResult result in results)
@@ -241,6 +241,8 @@
                 text += "text: " + result.Text + "<br>";
             }
             result = new MarkupString(text);
+
+            await barcodeJsInterop.DrawCanvas("videoOverlay", scanner.SourceWidth, scanner.SourceHeight, results);
         }
         StateHasChanged();
     }

@@ -169,11 +169,15 @@ export async function setVideoElement(scanner, videoId) {
     }
 }
 
-export async function openCamera(scanner, cameraInfo) {
+export async function openCamera(scanner, cameraInfo, dotNetHelper, callback) {
     if (!Dynamsoft) return;
 
     try {
         await scanner.setCurrentCamera(cameraInfo);
+        scanner.onPlayed = function () {
+            let resolution = scanner.getResolution();
+            dotNetHelper.invokeMethodAsync(callback, resolution[0], resolution[1]);
+        }
         await scanner.show();
     }
     catch (ex) {

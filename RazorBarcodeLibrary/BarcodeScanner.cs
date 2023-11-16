@@ -14,8 +14,9 @@ namespace RazorBarcodeLibrary
         private IJSObjectReference _jsObjectReference;
         private List<Camera> _cameras = new List<Camera>();
         private ICallback? _callback;
-        DotNetObjectReference<BarcodeScanner> objRef;
+        private DotNetObjectReference<BarcodeScanner> objRef;
         private bool _disposed = false;
+        public int SourceWidth, SourceHeight;
 
         public BarcodeScanner(IJSObjectReference module, IJSObjectReference scanner)
         {
@@ -31,7 +32,7 @@ namespace RazorBarcodeLibrary
 
         public async Task OpenCamera(Camera camera)
         {
-            await _module.InvokeVoidAsync("openCamera", _jsObjectReference, camera);
+            await _module.InvokeVoidAsync("openCamera", _jsObjectReference, camera, objRef, "OnSizeChanged");
         }
 
         public async Task CloseCamera()
@@ -79,7 +80,7 @@ namespace RazorBarcodeLibrary
 
         public interface ICallback
         {
-            void OnCallback(List<BarcodeResult> results);
+            Task OnCallback(List<BarcodeResult> results);
         }
 
         [JSInvokable]
@@ -90,6 +91,15 @@ namespace RazorBarcodeLibrary
             {
                 _callback.OnCallback(results);
             }
+
+            return Task.CompletedTask;
+        }
+
+        [JSInvokable]
+        public Task OnSizeChanged(int width, int height)
+        {
+            SourceWidth = width;
+            SourceHeight = height;
 
             return Task.CompletedTask;
         }
