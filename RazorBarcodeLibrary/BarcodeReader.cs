@@ -1,13 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
+﻿using Microsoft.JSInterop;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace RazorBarcodeLibrary
 {

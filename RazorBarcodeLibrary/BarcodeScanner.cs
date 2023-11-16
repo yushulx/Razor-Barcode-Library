@@ -1,11 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace RazorBarcodeLibrary
 {
@@ -14,16 +8,20 @@ namespace RazorBarcodeLibrary
         public string DeviceId { get; set; } = string.Empty;
         public string Label { get; set; } = string.Empty;
     }
-    public class BarcodeScanner
+    public class BarcodeScanner : IDisposable
     {
         private IJSObjectReference _module;
         private IJSObjectReference _jsObjectReference;
         private List<Camera> _cameras = new List<Camera>();
+        private ICallback? _callback;
+        DotNetObjectReference<BarcodeScanner> objRef;
+        private bool _disposed = false;
 
         public BarcodeScanner(IJSObjectReference module, IJSObjectReference scanner)
         {
             _module = module;
             _jsObjectReference = scanner;
+            objRef = DotNetObjectReference.Create(this);
         }
 
         public async Task SetVideoElement(string videoId)
@@ -77,6 +75,44 @@ namespace RazorBarcodeLibrary
             }
 
             return _cameras;
+        }
+
+        public interface ICallback
+        {
+            void OnCallback(List<BarcodeResult> results);
+        }
+
+        [JSInvokable]
+        public Task OnResultReady(object message)
+        {
+            List<BarcodeResult> results = BarcodeResult.WrapResult((JsonElement)message);
+            if (_callback != null)
+            {
+                _callback.OnCallback(results);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public async Task RegisterCallback(ICallback callback)
+        {
+            _callback = callback;
+            await _module.InvokeVoidAsync("registerCallback", _jsObjectReference, objRef, "OnResultReady");
+        }
+
+        public void Dispose()
+        {
+            if (_disposed == false)
+            {
+                objRef.Dispose();
+                _disposed = true;
+            }
+        }
+
+        ~BarcodeScanner()
+        {
+            if (_disposed == false)
+                Dispose();
         }
     }
 }

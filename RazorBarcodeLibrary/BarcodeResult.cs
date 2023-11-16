@@ -122,8 +122,6 @@ namespace RazorBarcodeLibrary
                                 barcodeResult.Y4 = intValue;
                             }
 
-                            Console.WriteLine(barcodeResult.ToString());
-
                         }
 
                         results.Add(barcodeResult);

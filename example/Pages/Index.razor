@@ -2,6 +2,7 @@
 @inject IJSRuntime JSRuntime
 @using System.Text.Json
 @using RazorBarcodeLibrary
+@implements BarcodeScanner.ICallback
 
 <PageTitle>Index</PageTitle>
 
@@ -72,8 +73,8 @@
         <div>
             <p>@result</p>
         </div>
-        
-    </div> 
+
+    </div>
 </div>
 
 @code {
@@ -84,11 +85,11 @@
     private MarkupString result;
     private string version = "N/A";
     private string? imageSrc;
-    private string licenseKey = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+    private string licenseKey =
+    "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
     private string _selectedOption = "Barcode Reader";
     private string selectedValue { get; set; } = string.Empty;
     private List<Camera> cameras = new List<Camera>();
-    private DotNetObjectReference<Index>? objRef;
 
     public string SelectedOption
     {
@@ -98,7 +99,7 @@
             if (_selectedOption != value)
             {
                 _selectedOption = value;
-                var _ = OnChange(); 
+                var _ = OnChange();
             }
         }
     }
@@ -118,7 +119,7 @@
         result = new MarkupString("");
         if (barcodeJsInterop != null) await barcodeJsInterop.ClearCanvas("overlay");
         var imageFiles = e.GetMultipleFiles();
-        var format = "image/png"; 
+        var format = "image/png";
 
         if (imageFiles.Count > 0)
         {
@@ -178,10 +179,8 @@
         version = await barcodeJsInterop.GetVersion();
         StateHasChanged();
         reader = await barcodeJsInterop.CreateBarcodeReader();
-        if (objRef != null)
-        {
-            scanner = await barcodeJsInterop.CreateBarcodeScanner((object)objRef, "OnResultReady");
-        }
+        scanner = await barcodeJsInterop.CreateBarcodeScanner();
+        await scanner.RegisterCallback(this);
 
         isLoading = false;
         // string parameters = await reader.GetParameters();
@@ -231,11 +230,8 @@
         isLoading = false;
     }
 
-    [JSInvokable]
-    public Task OnResultReady(object message)
+    public void OnCallback(List<BarcodeResult> results)
     {
-        // if (message == null) return Task.CompletedTask;
-        List<BarcodeResult> results = BarcodeResult.WrapResult((JsonElement)message);
         if (results.Count > 0)
         {
             string text = "";
@@ -247,16 +243,5 @@
             result = new MarkupString(text);
         }
         StateHasChanged();
-        return Task.CompletedTask;
-    }
-
-    protected override void OnInitialized()
-    {
-        objRef = DotNetObjectReference.Create(this);
-    }
-
-    public void Dispose()
-    {
-        objRef?.Dispose();
     }
 }

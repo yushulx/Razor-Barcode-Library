@@ -1,5 +1,4 @@
 using Microsoft.JSInterop;
-using System.Text.Json;
 
 namespace RazorBarcodeLibrary
 {
@@ -45,10 +44,10 @@ namespace RazorBarcodeLibrary
             return reader;
         }
 
-        public async Task<BarcodeScanner> CreateBarcodeScanner(object dotNetObjectReference, string callback)
+        public async Task<BarcodeScanner> CreateBarcodeScanner()
         {
             var module = await moduleTask.Value;
-            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeScanner", dotNetObjectReference, callback);
+            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeScanner");
             BarcodeScanner scanner = new BarcodeScanner(module, jsObjectReference);
             return scanner;
         }
