@@ -46,7 +46,6 @@
 
             <div>
                 <button @onclick="Decode">Read Barcode</button>
-                <p>@result</p>
             </div>
         }
         else if (_selectedOption == "Barcode Scanner")
@@ -70,6 +69,10 @@
                 <canvas id="videoOverlay"></canvas>
             </div>
         }
+        <div>
+            <p>@result</p>
+        </div>
+        
     </div> 
 </div>
 
@@ -85,6 +88,7 @@
     private string _selectedOption = "Barcode Reader";
     private string selectedValue { get; set; } = string.Empty;
     private List<Camera> cameras = new List<Camera>();
+    private DotNetObjectReference<Index>? objRef;
 
     public string SelectedOption
     {
@@ -101,6 +105,8 @@
 
     private async Task OnChange()
     {
+        result = new MarkupString("");
+
         if (scanner != null && _selectedOption == "Barcode Reader")
         {
             await scanner.CloseCamera();
@@ -172,7 +178,11 @@
         version = await barcodeJsInterop.GetVersion();
         StateHasChanged();
         reader = await barcodeJsInterop.CreateBarcodeReader();
-        scanner = await barcodeJsInterop.CreateBarcodeScanner();
+        if (objRef != null)
+        {
+            scanner = await barcodeJsInterop.CreateBarcodeScanner((object)objRef, "OnResultReady");
+        }
+
         isLoading = false;
         // string parameters = await reader.GetParameters();
         // Console.WriteLine(parameters);
@@ -219,5 +229,34 @@
         }
 
         isLoading = false;
+    }
+
+    [JSInvokable]
+    public Task OnResultReady(object message)
+    {
+        // if (message == null) return Task.CompletedTask;
+        List<BarcodeResult> results = BarcodeResult.WrapResult((JsonElement)message);
+        if (results.Count > 0)
+        {
+            string text = "";
+            foreach (BarcodeResult result in results)
+            {
+                text += "format: " + result.Format + ", ";
+                text += "text: " + result.Text + "<br>";
+            }
+            result = new MarkupString(text);
+        }
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    protected override void OnInitialized()
+    {
+        objRef = DotNetObjectReference.Create(this);
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
     }
 }

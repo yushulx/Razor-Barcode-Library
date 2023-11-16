@@ -45,10 +45,10 @@ namespace RazorBarcodeLibrary
             return reader;
         }
 
-        public async Task<BarcodeScanner> CreateBarcodeScanner()
+        public async Task<BarcodeScanner> CreateBarcodeScanner(object dotNetObjectReference, string callback)
         {
             var module = await moduleTask.Value;
-            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeScanner");
+            IJSObjectReference jsObjectReference = await module.InvokeAsync<IJSObjectReference>("createBarcodeScanner", dotNetObjectReference, callback);
             BarcodeScanner scanner = new BarcodeScanner(module, jsObjectReference);
             return scanner;
         }

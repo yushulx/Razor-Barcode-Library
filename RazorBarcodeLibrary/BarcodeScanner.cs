@@ -19,7 +19,7 @@ namespace RazorBarcodeLibrary
         private IJSObjectReference _module;
         private IJSObjectReference _jsObjectReference;
         private List<Camera> _cameras = new List<Camera>();
-        
+
         public BarcodeScanner(IJSObjectReference module, IJSObjectReference scanner)
         {
             _module = module;
