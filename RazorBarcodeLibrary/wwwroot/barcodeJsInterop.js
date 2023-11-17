@@ -57,6 +57,11 @@ export async function createBarcodeScanner() {
 
     try {
         let scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+        await scanner.updateRuntimeSettings("speed");
+        scanner.barcodeFillStyle = "transparent";
+        scanner.barcodeStrokeStyle = "transparent";
+        scanner.barcodeFillStyleBeforeVerification = "transparent";
+        scanner.barcodeStrokeStyleBeforeVerification = "transparent";
         scanner.onUnduplicatedRead = (txt, result) => { };
         scanner.onPlayed = function () {
 
