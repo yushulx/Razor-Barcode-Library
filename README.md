@@ -4,6 +4,10 @@ A Razor Class Library, equipped with the [Dynamsoft JavaScript Barcode SDK](http
 ## Online Demo
 [https://yushulx.me/Razor-Barcode-Library/](https://yushulx.me/Razor-Barcode-Library/)
 
+https://github.com/yushulx/Razor-Barcode-Library/assets/2202306/ac3c333f-7895-420a-94ee-6debe805a8b7
+
+
+
 ## Prerequisites
 - [Dynamsoft JavaScript Barcode License](https://www.dynamsoft.com/customer/license/trialLicense?product=dbr&utm_source=github&utm_campaign=razor-barcode-library)
 
