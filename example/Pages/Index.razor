@@ -146,7 +146,6 @@
             isLoading = true;
             IJSObjectReference canvas = await barcodeJsInterop.Base64ToCanvas(imageSrc);
             // List<BarcodeResult> results = await reader.DecodeCanvas(canvas);
-
             List<BarcodeResult> results = await reader.DecodeBase64(imageSrc);
             if (results.Count > 0)
             {

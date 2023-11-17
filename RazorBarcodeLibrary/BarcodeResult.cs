@@ -2,13 +2,27 @@
 
 namespace RazorBarcodeLibrary
 {
+    /// <summary>
+    /// Represents the result of a barcode scan, including the decoded text, format, and positional details.
+    /// </summary>
     public class BarcodeResult
     {
+        /// <summary>
+        /// Gets or sets the decoded text of the barcode.
+        /// </summary>
         public string Text { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the format of the decoded barcode.
+        /// </summary>
         public string Format { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the full information string of the barcode result.
+        /// </summary>
         public string FullInfo { get; set; } = string.Empty;
 
+        // Properties for the coordinates of the barcode corners
         public int X1 { get; set; }
         public int Y1 { get; set; }
         public int X2 { get; set; }
@@ -18,12 +32,19 @@ namespace RazorBarcodeLibrary
         public int X4 { get; set; }
         public int Y4 { get; set; }
 
-
+        /// <summary>
+        /// Returns a string that represents the current barcode result.
+        /// </summary>
+        /// <returns>A string representation of the barcode result.</returns>
         public override string ToString()
         {
             return $"Text: {Text}, Format: {Format}, X1: {X1}, Y1: {Y1}, X2: {X2}, Y2: {Y2}, X3: {X3}, Y3: {Y3}, X4: {X4}, Y4: {Y4}";
         }
 
+        /// <summary>
+        /// Converts the barcode result into a JSON formatted dictionary.
+        /// </summary>
+        /// <returns>A dictionary containing the barcode result data in JSON format.</returns>
         public Dictionary<string, object> ToJson()
         {
             var jsonDict = new Dictionary<string, object>();
@@ -40,6 +61,11 @@ namespace RazorBarcodeLibrary
             return jsonDict;
         }
 
+        /// <summary>
+        /// Static method to wrap JSON results into a list of BarcodeResult objects.
+        /// </summary>
+        /// <param name="result">The JSON element containing the barcode scan results.</param>
+        /// <returns>A list of BarcodeResult objects representing the scan results.</returns>
         public static List<BarcodeResult> WrapResult(JsonElement? result)
         {
             List<BarcodeResult> results = new List<BarcodeResult>();
